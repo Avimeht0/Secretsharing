@@ -82,7 +82,7 @@ class SecretSharingViewModel : ViewModel() {
                     // Save shares
                     shares.forEachIndexed { index, share ->
                         val shareBitmap = shareToBitmap(share)
-                        val shareFile = File(sessionDir, "Share_${index + 1}.png")
+                        val shareFile = File(sessionDir, "${imageLabel}_share_${index + 1}.png")
                         saveBitmap(shareBitmap, shareFile)
                     }
 
@@ -98,7 +98,7 @@ class SecretSharingViewModel : ViewModel() {
         }
     }
 
-    fun reconstructImage(context: Context, shareUris: List<Uri>, originalShareDir: String? = null) {
+    fun reconstructImage(context: Context, shareUris: List<Uri>, originalShareDir: String? = null, imageLabel: String) {
         viewModelScope.launch {
             _uiState.value = SecretSharingUiState.Loading
             try {
@@ -149,7 +149,7 @@ class SecretSharingViewModel : ViewModel() {
                     outputDir.mkdirs()
 
                     val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-                    val outputFile = File(outputDir, "Reconstructed_$timestamp.png")
+                    val outputFile = File(outputDir, "${imageLabel}_reconstruction.png")
                     
                     val reconstructedBitmap = binaryArrayToBitmap(reconstructed)
                     saveBitmap(reconstructedBitmap, outputFile)

@@ -23,6 +23,7 @@ fun ShareReconstructionScreen(navController: NavController) {
     val context = LocalContext.current
     var selectedShares by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var k by remember { mutableStateOf("") }
+    var imageLabel by remember { mutableStateOf("") }
     val uiState by viewModel.uiState.collectAsState()
 
     val sharePicker = rememberLauncherForActivityResult(
@@ -61,6 +62,15 @@ fun ShareReconstructionScreen(navController: NavController) {
                 .padding(vertical = 8.dp)
         )
 
+        OutlinedTextField(
+            value = imageLabel,
+            onValueChange = { imageLabel = it },
+            label = { Text("Image Label") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
+
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
@@ -79,7 +89,7 @@ fun ShareReconstructionScreen(navController: NavController) {
             onClick = {
                 k.toIntOrNull()?.let { kValue ->
                     if (selectedShares.size >= kValue) {
-                        viewModel.reconstructImage(context, selectedShares.take(kValue))
+                        viewModel.reconstructImage(context, selectedShares.take(kValue), null, imageLabel)
                     }
                 }
             },
