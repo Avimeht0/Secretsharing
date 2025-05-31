@@ -2,6 +2,7 @@ package com.example.secretsharing.ui.screens
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -39,13 +40,25 @@ fun HomeScreen(navController: NavController) {
         }
     }
 
-    fun openFileViewer() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "image/*"
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+    val viewFilePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(it, "image/*")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, "No app found to view images", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error opening image", Toast.LENGTH_SHORT).show()
+            }
         }
-        context.startActivity(intent)
     }
     
     Scaffold(
@@ -71,7 +84,7 @@ fun HomeScreen(navController: NavController) {
                             text = { Text("View Files") },
                             onClick = {
                                 showMenu = false
-                                openFileViewer()
+                                viewFilePicker.launch("image/*")
                             }
                         )
                     }
