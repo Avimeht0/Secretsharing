@@ -34,7 +34,7 @@ This Android application implements a secret sharing scheme using QR codes, allo
 ### Method 1: Using Android Studio (For Developers)
 1. **Clone the Repository**
    ```bash
-   git clone [repository-url]
+   git clone git@github.com:Avimeht0/Secretsharing.git
    cd SecretSharing
    ```
 
