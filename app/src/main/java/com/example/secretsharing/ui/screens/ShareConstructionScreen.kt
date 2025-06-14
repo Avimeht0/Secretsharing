@@ -29,9 +29,6 @@ fun ShareConstructionScreen(navController: NavController) {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
-        uri?.let {
-            imageLabel = it.lastPathSegment?.substringBeforeLast('.') ?: "image"
-        }
     }
 
     Column(
